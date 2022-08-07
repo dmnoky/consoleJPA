@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Разрешаем использование аннотаций (то есть @Autowired и.т.д) -->
+    <context:annotation-config/>
+    <!-- Пакет для автозаполения -->
+    <context:component-scan base-package="sberJPA.controller" />
+
+    <!-- SERVICES -->
+    <bean id="childService" class="sberJPA.service.user.ChildServiceImpl">
+        <property name="childDao" ref="childDao"/>
+    </bean>
+    <bean id="parentService" class="sberJPA.service.user.ParentServiceImpl">
+        <property name="parentDao" ref="parentDao"/>
+    </bean>
+    <bean id="districtService" class="sberJPA.service.other.DistrictServiceImpl">
+        <property name="districtDao" ref="districtDao"/>
+    </bean>
+    <bean id="addressService" class="sberJPA.service.other.AddressServiceImpl">
+        <property name="addressDao" ref="addressDao"/>
+    </bean>
+    <bean id="institutionService" class="sberJPA.service.other.InstitutionServiceImpl">
+        <property name="institutionDao" ref="institutionDao"/>
+    </bean>
+
+    <!-- CONTROLLERS -->
+    <bean id="childController" class="sberJPA.controller.ChildController"/>
+    <bean id="parentController" class="sberJPA.controller.ParentController"/>
+    <bean id="addressController" class="sberJPA.controller.AddressController"/>
+    <bean id="districtController" class="sberJPA.controller.DistrictController"/>
+    <bean id="institutionController" class="sberJPA.controller.InstitutionController"/>
+    <bean id="controllerFactory" class="sberJPA.controller.ControllerFactory">
+        <property name="childController" ref="childController"/>
+        <property name="parentController" ref="parentController"/>
+        <property name="addressController" ref="addressController"/>
+        <property name="districtController" ref="districtController"/>
+        <property name="institutionController" ref="institutionController"/>
+    </bean>
+
+    <import resource="data-source.xml"/>
+</beans>

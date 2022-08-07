@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://logging.apache.org/log4j/2.x/manual/ -->
+<Configuration name="ConfigurationTest" monitorInterval="10">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n"/>
+        </Console>
+        <RollingFile name="OkayRollingFileAppender"
+                     fileName="..\logs\sberJPA\controllers.txt"
+                     filePattern="..\logs\sberJPA\controllers-%d{yyyy-MM-dd-HH}-%i.txt">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-7level %logger{2} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="ErrorRollingFileAppender"
+                     fileName="..\logs\sberJPA\errors.txt"
+                     filePattern="..\logs\sberJPA\errors-%d{yyyy-MM-dd-HH}-%i.txt">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-2level %logger{6} [%l] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="30MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="sberJPA.controller" level="debug" additivity="true">
+            <AppenderRef ref="OkayRollingFileAppender"/>
+        </Logger>
+        <Logger name="sberJPA" level="trace">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+        <Root level="all">
+            <!--<AppenderRef ref="ConsoleAppender" level="trace"/>-->
+            <AppenderRef ref="ErrorRollingFileAppender" level="error"/>
+        </Root>
+    </Loggers>
+</Configuration>
